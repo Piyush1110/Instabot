@@ -34,7 +34,67 @@ def user_recent_posts(user_name):
 
     else:
         print("user does not exist")
-user_recent_posts("piyush_chaturvedi")
+
+def like_user_post(user_name):
+    post_id=user_recent_posts(user_name)
+    #Token = {'access_token': Access_Token}
+    request_url = (Base_URL + "/media/%s/likes?access_token=%s") % (post_id,Access_Token)
+    print(request_url)
+    #print(Token)
+    post_a_like=requests.post(request_url).json()
+    if post_a_like['meta']['code']==200:
+        print("Like Successful")
+    else:
+        print("Try Again")
+
+
+#like_user_post("piyush_chaturvedi")
+
+
+def comment_on_user_post(user_name):
+    post_id = user_recent_posts(user_name)
+    comment=str(input("Enter the comment which you want to make"))
+    request_url = (Base_URL + "/media/%s/comments?") % (post_id)
+    request_data = {'access_token':Access_Token,'text':comment}
+    get_a_comment=requests.get(request_url,request_data).json()
+    if get_a_comment['meta']['code']==200:
+        print("Commented Successfully")
+    else:
+        print("Try Again")
+
+
+#comment_on_user_post("piyush_chaturvedi1996")
+
+
+def return_comment_id(user_name):
+    word=str(input("Enter the word for which the comment is to be searched for"))
+    post_id = user_recent_posts(user_name)
+    request_url = (Base_URL + "/media/%s/comments?access_token=%s") % (post_id,Access_Token)
+    get_a_comment=requests.get(request_url).json()
+    if get_a_comment['meta']['code'] == 200:
+        for i in range(len(get_a_comment['data'])):
+            if word in get_a_comment['data'][i]['text']:
+                print("the comment id is" + get_a_comment['data'][i]['id'])
+                #print("Comment found successfully")
+                return(get_a_comment['data'][i]['id'])
+        else:
+            print("Comment Not Found")
+    else:
+        print("There was error in URL")
+comment_id=return_comment_id("piyush_chaturvedi1996")
+def delete_comment_according_to_the_word(user_name):
+    post_id = user_recent_posts(user_name)
+    print(comment_id)
+    request_url = (Base_URL + "/media/%s/comments/%s?access_token=%s") % (post_id,comment_id,Access_Token)
+    delete_a_comment=requests.delete(request_url).json()
+    print(delete_a_comment)
+    if delete_a_comment['meta']['code'] == 200:
+        print("The Comment is deleted successfully")
+    else:
+        print("There was error in URL")
+delete_comment_according_to_the_word("piyush_chaturvedi1996")
+
+
 
 
 
