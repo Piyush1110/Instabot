@@ -1,8 +1,15 @@
 import requests
-Access_Token = '4870715640.a48e759.874aba351e5147eca8a9d36b9688f494'
+Access_Token = '2014479056.b79054f.e93bfd8ad67448788e997ac8a25926cf'
 Base_URL="https://api.instagram.com/v1"
+
+user_name=input("Enter the username for which the action is to be performed")
+print("The work which the Instabot can perform is:-")
+print("1.Get your details from Instagram")
+print("2.Get the user id of some username from Instagram")
+print("3.Get the Post ID of the recent post of the user according to the caption on the Post")
+print
+
 Average_of_letters_in_comments=0
-sum=0
 Total_length=0
 def MyInfo():
     request_url = Base_URL + "/users/self/?access_token=" + Access_Token
@@ -34,6 +41,7 @@ def user_recent_posts(user_name):
     else:
         print("user does not have any post")
 
+user_recent_posts("piyush_chaturvedi1996")
 def like_user_post(user_name):
     post_id=user_recent_posts(user_name)
     print(post_id)
@@ -92,7 +100,7 @@ def return_comment_id(user_name):
             print("Comment Not Found")
     else:
         print("There was error in URL")
-comment_id=return_comment_id("piyush_chaturvedi1996")
+#comment_id=return_comment_id("piyush_chaturvedi1996")
 
 
 def delete_comment_according_to_the_word(user_name):
@@ -109,11 +117,26 @@ def delete_comment_according_to_the_word(user_name):
         print("There was error in URL")
     """
 
-#delete_comment_according_to_the_word("rajat8310")
+#delete_comment_according_to_the_word("piyushsharma576")
 
 
 def function_to_calculate_average(user_name):
-    
+    list_for_comments=[]
+    sum=0
+    post_id=user_recent_posts(user_name)
+    request_url = (Base_URL + "/media/%s/comments?access_token=%s") % (post_id, Access_Token)
+    get_a_comment = requests.get(request_url).json()
+    print(get_a_comment)
+    if get_a_comment['meta']['code']==200:
+        Total_length=len(get_a_comment['data'])
+        for comment in range(len(get_a_comment['data'])):
+            list_for_comments=get_a_comment['data'][comment]['text'].split()
+            sum+=len(list_for_comments)
+        Average_of_letters_in_comments=sum/Total_length
+        print(Average_of_letters_in_comments)
+    else:
+        print("There is an error in URL")
+function_to_calculate_average("piyush_chaturvedi1996")
 
 
 
