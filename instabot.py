@@ -26,7 +26,7 @@ def get_user_id(user_name):
     user_info = requests.get(request_url).json()
     if len(user_info['data']):
 
-        print("The User id is" + user_info['data'][0][id])
+        print("The User id is" + user_info['data'][0]['id'])
         return(user_info['data'][0]['id'])
     else:
         print("user does not exist")
